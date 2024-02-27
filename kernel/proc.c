@@ -277,6 +277,9 @@ fork(void)
 
   np->parent = p;
 
+  //pass the trace_id to the child process
+  np->trace_id = p->trace_id;
+
   // copy saved user registers.
   *(np->trapframe) = *(p->trapframe);
 
@@ -692,4 +695,16 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+//count the number of processes that are not in the unused state
+uint64 count_not_unused_processes(){
+  uint64 count = 0;
+  for (int i = 0; i < NPROC; i++)
+  {
+    if(proc[i].state !=0){
+      count++;
+    } 
+  }
+  return count;
 }
